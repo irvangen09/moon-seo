@@ -1,0 +1,31 @@
+# Version control and editor config
+.git
+.github
+.gitignore
+.gitattributes
+.editorconfig
+.distignore
+
+# Tooling
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpcs.xml
+webpack.config.js
+node_modules
+vendor
+src
+scripts
+
+# Repository documentation
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+MAINTENANCE.md
+
+# Misc
+*.log
+.DS_Store

@@ -1,0 +1,28 @@
+{
+  "name": "moon-seo",
+  "version": "0.1.0",
+  "description": "A lightweight, modular WordPress plugin for technical SEO: meta tags, XML sitemaps, and structured data.",
+  "private": true,
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "lint:js": "wp-scripts lint-js",
+    "format": "wp-scripts format",
+    "plugin-zip": "node scripts/plugin-zip.js",
+    "makepot": "wp i18n make-pot . languages/moon-seo.pot --exclude=vendor,node_modules,build"
+  },
+  "files": [
+    "moon-seo.php",
+    "uninstall.php",
+    "includes",
+    "modules",
+    "build",
+    "languages"
+  ],
+  "devDependencies": {
+    "@wordpress/scripts": "^30.0.0"
+  },
+  "overrides": {
+    "typescript": "^5.9.3"
+  }
+}

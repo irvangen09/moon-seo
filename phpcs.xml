@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<ruleset name="Moon SEO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+	<description>Coding standards for Moon SEO.</description>
+
+	<file>.</file>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="parallel" value="8"/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+
+	<config name="minimum_wp_version" value="6.9"/>
+
+	<rule ref="WordPress-Extra"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="moon-seo"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="moon_seo"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- PSR-4 class files are named after the class, not in lowercase-hyphen form. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>*/includes/*</exclude-pattern>
+		<exclude-pattern>*/modules/*</exclude-pattern>
+	</rule>
+</ruleset>

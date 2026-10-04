@@ -1,0 +1,22 @@
+{
+  "name": "moon/moon-seo",
+  "description": "A lightweight, modular WordPress plugin for technical SEO: meta tags, XML sitemaps, and structured data.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.0"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "scripts": {
+    "lint:php": "phpcs"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "sort-packages": true
+  }
+}
