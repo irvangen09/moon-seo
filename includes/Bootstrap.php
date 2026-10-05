@@ -69,7 +69,7 @@ final class Bootstrap {
 
 	private function register_modules(): void {
 		$option_manager       = new OptionManager();
-		$site_identity        = new SiteIdentity( $option_manager );
+		$site_identity        = new SiteIdentity();
 		$admin_menu           = new AdminMenu();
 		$supported_post_types = new SupportedPostTypes();
 
