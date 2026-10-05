@@ -1,0 +1,70 @@
+.moon-seo-settings__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 24px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.moon-seo-settings__header h1 {
+	margin: 0;
+}
+
+/* Spacing between repeated groups (for example Homepage, Post, Page) inside one panel. */
+.moon-seo-settings .components-panel__body h3 {
+	margin-top: 32px;
+	margin-bottom: 8px;
+}
+
+.moon-seo-settings .components-panel__body h3:first-child {
+	margin-top: 0;
+}
+
+/* Controls opt into the margin-free style, so the spacing between them is set here. */
+.moon-seo-settings .components-base-control {
+	margin-bottom: 16px;
+}
+
+.moon-seo-settings [role='group'] .components-base-control {
+	margin-bottom: 8px;
+}
+
+/* Layout for custom fields that do not use BaseControl. */
+.moon-seo-field {
+	margin-bottom: 24px;
+}
+
+.moon-seo-field__help {
+	margin-top: 4px;
+	margin-bottom: 8px;
+	color: #757575;
+	font-size: 13px;
+}
+
+.moon-seo-field__preview {
+	margin-top: 8px;
+	padding: 8px 12px;
+	border-left: 3px solid #dcdcde;
+	color: #757575;
+	font-size: 13px;
+	font-style: italic;
+}
+
+.moon-seo-field__counter {
+	margin-top: 4px;
+	margin-bottom: 0;
+	color: #757575;
+	font-size: 13px;
+}
+
+/* Keeps a recommended-size image (1200x630) from overflowing the panel. */
+.moon-seo-media-upload-field__preview img {
+	display: block;
+	max-width: 100%;
+	max-height: 200px;
+	height: auto;
+	border: 1px solid #dcdcde;
+	border-radius: 2px;
+}
