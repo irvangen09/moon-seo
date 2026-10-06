@@ -23,5 +23,7 @@
 }
 
 .moon-seo-template-field__variable.components-button:focus:not(:disabled) {
-	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1;
+	box-shadow:
+		0 0 0 1px #fff,
+		0 0 0 3px #2271b1;
 }
