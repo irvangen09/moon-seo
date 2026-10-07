@@ -22,11 +22,13 @@ final class Module implements ModuleInterface {
 
 	private AdminMenu $admin_menu;
 
-	// The constructor signature is shared by every module; SupportedPostTypes is not used by this module yet.
+	private SupportedPostTypes $supported_post_types;
+
 	public function __construct( OptionManager $option_manager, SiteIdentity $site_identity, AdminMenu $admin_menu, SupportedPostTypes $supported_post_types ) {
-		$this->option_manager = $option_manager;
-		$this->site_identity  = $site_identity;
-		$this->admin_menu     = $admin_menu;
+		$this->option_manager       = $option_manager;
+		$this->site_identity        = $site_identity;
+		$this->admin_menu           = $admin_menu;
+		$this->supported_post_types = $supported_post_types;
 	}
 
 	public function get_slug(): string {
@@ -40,5 +42,7 @@ final class Module implements ModuleInterface {
 		$admin->init();
 
 		( new Assets( $admin ) )->init();
+
+		( new Frontend( $this->option_manager, $this->site_identity, $this->supported_post_types ) )->init();
 	}
 }
