@@ -41,8 +41,15 @@ final class Module implements ModuleInterface {
 		$admin = new Admin( $this->admin_menu );
 		$admin->init();
 
-		( new Assets( $admin ) )->init();
+		$editor = new Editor( $this->supported_post_types );
+		$editor->init();
+
+		( new MetaBox( $editor, $this->supported_post_types ) )->init();
+
+		( new Assets( $admin, $editor ) )->init();
 
 		( new Frontend( $this->option_manager, $this->site_identity, $this->supported_post_types ) )->init();
+
+		( new UrlRewriter( $this->option_manager ) )->init();
 	}
 }
