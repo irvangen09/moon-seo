@@ -36,8 +36,8 @@ final class Frontend {
 		$this->renderers = array(
 			new TitleRenderer( $option_manager, new TitleResolver( $placeholder_resolver ), $supported_post_types ),
 			new MetaRenderer( $option_manager, $description_resolver ),
-			new OpenGraphRenderer( $option_manager, $placeholder_resolver, $description_resolver, $site_identity ),
-			new TwitterCardRenderer( $option_manager, $placeholder_resolver, $description_resolver, $site_identity ),
+			new OpenGraphRenderer( $option_manager, $description_resolver, $site_identity, $supported_post_types ),
+			new TwitterCardRenderer( $option_manager, $description_resolver, $site_identity ),
 			new VerificationRenderer( $option_manager ),
 		);
 	}

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Requires $placeholder_resolver, $description_resolver and $site_identity on the consuming class.
+// Requires $description_resolver and $site_identity on the consuming class.
 trait SocialMetaTrait {
 
 	// Open Graph tags use "property", Twitter Card tags use "name".
@@ -38,20 +38,9 @@ trait SocialMetaTrait {
 		);
 	}
 
+	// The same title the <title> tag prints, so the three never disagree.
 	private function resolve_title(): string {
-		if ( is_front_page() ) {
-			return $this->placeholder_resolver->get_homepage_title();
-		}
-
-		if ( is_singular() ) {
-			return get_the_title();
-		}
-
-		if ( is_category() || is_tag() ) {
-			return single_term_title( '', false );
-		}
-
-		return '';
+		return wp_get_document_title();
 	}
 
 	// Order: the post's featured image, this platform's default image, then the site image.

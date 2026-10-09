@@ -3,7 +3,6 @@
 namespace Moon\SEO\Modules\General\Renderers;
 
 use Moon\SEO\Modules\General\Services\DescriptionResolver;
-use Moon\SEO\Modules\General\Services\PlaceholderResolver;
 use Moon\SEO\Services\OptionManager;
 use Moon\SEO\Services\SiteIdentity;
 
@@ -19,20 +18,16 @@ final class TwitterCardRenderer implements RendererInterface {
 
 	private OptionManager $option_manager;
 
-	private PlaceholderResolver $placeholder_resolver;
-
 	private DescriptionResolver $description_resolver;
 
 	private SiteIdentity $site_identity;
 
 	public function __construct(
 		OptionManager $option_manager,
-		PlaceholderResolver $placeholder_resolver,
 		DescriptionResolver $description_resolver,
 		SiteIdentity $site_identity
 	) {
 		$this->option_manager       = $option_manager;
-		$this->placeholder_resolver = $placeholder_resolver;
 		$this->description_resolver = $description_resolver;
 		$this->site_identity        = $site_identity;
 	}
