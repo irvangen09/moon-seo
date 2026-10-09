@@ -23,6 +23,7 @@ function getVariableLabel( variable ) {
 }
 
 // Text field with buttons that append {variable} tokens to the end of the value.
+// countedLength replaces the length of the value in the counter, for callers that know the resolved text.
 export default function TemplateField( {
 	label,
 	help,
@@ -30,6 +31,7 @@ export default function TemplateField( {
 	onChange,
 	variables,
 	maxLength,
+	countedLength,
 	multiline,
 	placeholder,
 } ) {
@@ -70,7 +72,7 @@ export default function TemplateField( {
 
 			{ maxLength && (
 				<p className="moon-seo-field__counter" aria-live="polite">
-					{ currentValue.length } / { maxLength }
+					{ countedLength ?? currentValue.length } / { maxLength }
 				</p>
 			) }
 		</div>

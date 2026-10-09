@@ -5,6 +5,7 @@ import { useEntityProp } from '@wordpress/core-data';
 import { TextControl, CheckboxControl, PanelBody } from '@wordpress/components';
 
 import Preview from './preview';
+import useSeoPreview from '../use-seo-preview';
 import TemplateField from '../../shared/template-field';
 import {
 	META_KEY_TITLE,
@@ -21,25 +22,37 @@ import {
 const SIDEBAR_NAME = 'moon-seo-sidebar';
 
 export default function Sidebar() {
-	const { postType, postTitle, permalink } = useSelect( ( select ) => {
-		const editor = select( 'core/editor' );
+	const { postId, postType, postTitle, permalink } = useSelect(
+		( select ) => {
+			const editor = select( 'core/editor' );
 
-		return {
-			postType: editor.getCurrentPostType(),
-			postTitle: editor.getEditedPostAttribute( 'title' ),
-			permalink: editor.getPermalink(),
-		};
-	}, [] );
+			return {
+				postId: editor.getCurrentPostId(),
+				postType: editor.getCurrentPostType(),
+				postTitle: editor.getEditedPostAttribute( 'title' ),
+				permalink: editor.getPermalink(),
+			};
+		},
+		[]
+	);
 
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
+
+	const seoTitle = meta?.[ META_KEY_TITLE ] || '';
+	const metaDescription = meta?.[ META_KEY_DESCRIPTION ] || '';
+
+	const preview = useSeoPreview( {
+		postId,
+		seoTitle,
+		metaDescription,
+		postTitle,
+	} );
 
 	// The post type does not expose its meta over REST, so there is nothing to edit.
 	if ( ! meta ) {
 		return null;
 	}
 
-	const seoTitle = meta[ META_KEY_TITLE ] || '';
-	const metaDescription = meta[ META_KEY_DESCRIPTION ] || '';
 	const canonical = meta[ META_KEY_CANONICAL ] || '';
 	const robots = meta[ META_KEY_ROBOTS ] || [];
 
@@ -71,8 +84,10 @@ export default function Sidebar() {
 						initialOpen
 					>
 						<Preview
-							title={ seoTitle || postTitle }
-							description={ metaDescription }
+							title={ preview?.title || seoTitle || postTitle }
+							description={
+								preview ? preview.description : metaDescription
+							}
 							url={ permalink }
 						/>
 					</PanelBody>
@@ -89,6 +104,7 @@ export default function Sidebar() {
 							}
 							variables={ TITLE_VARIABLES }
 							maxLength={ TITLE_MAX_LENGTH }
+							countedLength={ preview?.title.length }
 						/>
 
 						<TemplateField
@@ -99,6 +115,7 @@ export default function Sidebar() {
 							}
 							variables={ DESCRIPTION_VARIABLES }
 							maxLength={ DESCRIPTION_MAX_LENGTH }
+							countedLength={ preview?.description.length }
 							multiline
 						/>
 

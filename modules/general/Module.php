@@ -3,6 +3,10 @@
 namespace Moon\SEO\Modules\General;
 
 use Moon\SEO\ModuleInterface;
+use Moon\SEO\Modules\General\Services\DescriptionGenerator;
+use Moon\SEO\Modules\General\Services\DescriptionResolver;
+use Moon\SEO\Modules\General\Services\PlaceholderResolver;
+use Moon\SEO\Modules\General\Services\TitleResolver;
 use Moon\SEO\Services\AdminMenu;
 use Moon\SEO\Services\OptionManager;
 use Moon\SEO\Services\SiteIdentity;
@@ -48,7 +52,14 @@ final class Module implements ModuleInterface {
 
 		( new Assets( $admin, $editor ) )->init();
 
-		( new Frontend( $this->option_manager, $this->site_identity, $this->supported_post_types ) )->init();
+		// The frontend and the editor preview share these, so the preview always matches the output.
+		$placeholder_resolver = new PlaceholderResolver( $this->option_manager, $this->site_identity );
+		$title_resolver       = new TitleResolver( $placeholder_resolver, $this->option_manager, $this->supported_post_types );
+		$description_resolver = new DescriptionResolver( $this->option_manager, $placeholder_resolver, new DescriptionGenerator(), $this->supported_post_types );
+
+		( new Frontend( $this->option_manager, $this->site_identity, $this->supported_post_types, $title_resolver, $description_resolver ) )->init();
+
+		( new PreviewRoute( $title_resolver, $description_resolver, $this->supported_post_types ) )->init();
 
 		( new UrlRewriter( $this->option_manager ) )->init();
 	}

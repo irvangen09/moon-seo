@@ -4,6 +4,7 @@ namespace Moon\SEO\Modules\General\Services;
 
 use Moon\SEO\Services\OptionManager;
 use Moon\SEO\Services\SiteIdentity;
+use WP_Post;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,6 +52,10 @@ final class PlaceholderResolver {
 
 	public function get_site_name(): string {
 		return $this->site_identity->get_effective_website_name();
+	}
+
+	public function is_front_page_post( WP_Post $post ): bool {
+		return 'page' === get_option( 'show_on_front' ) && (int) get_option( 'page_on_front' ) === $post->ID;
 	}
 
 	// With a static front page the page's own title is used, so the default template does not print the site name twice.
