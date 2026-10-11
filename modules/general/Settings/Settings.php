@@ -112,7 +112,7 @@ final class Settings {
 
 		$this->option_manager->update_all( self::MODULE_SLUG, $sanitized );
 
-		$this->maybe_flush_rewrite_rules( $before, $sanitized );
+		$this->maybe_reset_rewrite_rules( $before, $sanitized );
 
 		return new WP_REST_Response( $this->overlay_site_identity( $sanitized ) );
 	}
@@ -158,13 +158,14 @@ final class Settings {
 		return $data;
 	}
 
-	private function maybe_flush_rewrite_rules( array $before, array $after ): void {
+	// The rules are rebuilt on the next request: UrlRewriter was initialised with the old values, so rebuilding here would keep them.
+	private function maybe_reset_rewrite_rules( array $before, array $after ): void {
 		$before_url = $before['robots_url'] ?? array();
 		$after_url  = $after['robots_url'] ?? array();
 
 		foreach ( self::REWRITE_FIELDS as $field ) {
 			if ( ! empty( $before_url[ $field ] ) !== ! empty( $after_url[ $field ] ) ) {
-				flush_rewrite_rules();
+				delete_option( 'rewrite_rules' );
 				return;
 			}
 		}
