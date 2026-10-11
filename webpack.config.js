@@ -5,5 +5,6 @@ module.exports = {
 	entry: {
 		admin: './src/admin/index.js',
 		editor: './src/editor/index.js',
+		'sitemap-admin': './src/sitemap-admin/index.js',
 	},
 };

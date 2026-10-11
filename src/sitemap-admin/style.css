@@ -1,0 +1,11 @@
+@import "../shared/settings-shell.css";
+
+/* Keeps a long category list from pushing the rest of the panel down. */
+.moon-seo-sitemap-categories {
+	max-height: 240px;
+	margin-bottom: 16px;
+	padding: 8px 12px;
+	overflow-y: auto;
+	border: 1px solid #dcdcde;
+	border-radius: 2px;
+}
