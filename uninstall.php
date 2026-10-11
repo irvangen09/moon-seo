@@ -24,9 +24,9 @@ function moon_seo_uninstall_cleanup_site() {
 		delete_post_meta_by_key( $meta_key );
 	}
 
-	// Sitemap transients never expire and their names vary per content type,
+	// Sitemap cache entries and their version tokens have names that vary per content type,
 	// so they are removed by prefix.
-	foreach ( array( '_transient_moon_seo_sitemap_', '_transient_timeout_moon_seo_sitemap_' ) as $option_prefix ) {
+	foreach ( array( '_transient_moon_seo_sitemap_', '_transient_timeout_moon_seo_sitemap_', 'moon_seo_sitemap_ver_' ) as $option_prefix ) {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk delete by prefix has no WordPress API.
 		$wpdb->query(
 			$wpdb->prepare(
@@ -35,6 +35,9 @@ function moon_seo_uninstall_cleanup_site() {
 			)
 		);
 	}
+
+	// Rebuilt by WordPress on the next request, without the plugin's rules.
+	delete_option( 'rewrite_rules' );
 }
 
 if ( is_multisite() ) {

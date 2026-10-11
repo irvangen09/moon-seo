@@ -34,6 +34,13 @@ require_once MOON_SEO_PATH . 'includes/Autoloader.php';
 ( new Autoloader( 'Moon\SEO\Modules\Schema', MOON_SEO_PATH . 'modules/schema' ) )->register();
 ( new Autoloader( 'Moon\SEO', MOON_SEO_PATH . 'includes' ) )->register();
 
+// The sitemap rewrite rules appear or disappear with the plugin; WordPress rebuilds the stored rules on the next request.
+$moon_seo_reset_rewrite_rules = static function () {
+	delete_option( 'rewrite_rules' );
+};
+register_activation_hook( __FILE__, $moon_seo_reset_rewrite_rules );
+register_deactivation_hook( __FILE__, $moon_seo_reset_rewrite_rules );
+
 add_action(
 	'plugins_loaded',
 	static function () {
