@@ -4,6 +4,7 @@ namespace Moon\SEO\Modules\General\Services;
 
 use Moon\SEO\Services\OptionManager;
 use Moon\SEO\Services\SiteIdentity;
+use Moon\SEO\Support\PostTitle;
 use WP_Post;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,7 +65,7 @@ final class PlaceholderResolver {
 			$front_page_id = (int) get_option( 'page_on_front' );
 
 			if ( $front_page_id > 0 ) {
-				$front_page_title = get_the_title( $front_page_id );
+				$front_page_title = PostTitle::get( $front_page_id );
 
 				if ( '' !== $front_page_title ) {
 					return $front_page_title;

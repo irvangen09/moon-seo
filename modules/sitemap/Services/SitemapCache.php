@@ -2,6 +2,8 @@
 
 namespace Moon\SEO\Modules\Sitemap\Services;
 
+use Moon\SEO\Support\PostMetaKeys;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -60,6 +62,11 @@ final class SitemapCache {
 		add_action( 'delete_post', array( $this, 'invalidate_for_post' ) );
 		add_action( 'trashed_post', array( $this, 'invalidate_for_post' ) );
 
+		// The block editor and REST write post meta after save_post has fired, and a noindex override decides whether a post is listed.
+		add_action( 'added_post_meta', array( $this, 'invalidate_for_robots_meta' ), 10, 3 );
+		add_action( 'updated_post_meta', array( $this, 'invalidate_for_robots_meta' ), 10, 3 );
+		add_action( 'deleted_post_meta', array( $this, 'invalidate_for_robots_meta' ), 10, 3 );
+
 		add_action( 'created_term', array( $this, 'invalidate_for_term' ), 10, 3 );
 		add_action( 'edited_term', array( $this, 'invalidate_for_term' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'invalidate_for_term' ), 10, 3 );
@@ -107,6 +114,15 @@ final class SitemapCache {
 		// The homepage lastmod follows the latest post, or the static front page.
 		if ( 'post' === $post_type || (int) get_option( 'page_on_front' ) === $post_id ) {
 			$this->invalidate( 'homepage' );
+		}
+	}
+
+	/**
+	 * @param mixed $meta_id Meta ID, or the list of IDs when meta is deleted.
+	 */
+	public function invalidate_for_robots_meta( $meta_id, int $post_id, string $meta_key ): void {
+		if ( PostMetaKeys::ROBOTS === $meta_key ) {
+			$this->invalidate_for_post( $post_id );
 		}
 	}
 

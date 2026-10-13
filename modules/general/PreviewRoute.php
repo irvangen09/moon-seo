@@ -5,6 +5,7 @@ namespace Moon\SEO\Modules\General;
 use Moon\SEO\Modules\General\Services\DescriptionResolver;
 use Moon\SEO\Modules\General\Services\TitleResolver;
 use Moon\SEO\Services\SupportedPostTypes;
+use Moon\SEO\Support\PostTitle;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -97,7 +98,7 @@ final class PreviewRoute {
 		// The post title being typed replaces the saved one, filtered the way WordPress prints it.
 		$typed_post             = clone $post;
 		$typed_post->post_title = (string) $request->get_param( 'title' );
-		$post_title             = get_the_title( $typed_post );
+		$post_title             = PostTitle::get( $typed_post );
 
 		$title       = $this->title_resolver->resolve_for_post( $post, (string) $request->get_param( 'seo_title' ), $post_title );
 		$description = $this->description_resolver->resolve_for_post( $post, (string) $request->get_param( 'meta_description' ), $post_title );

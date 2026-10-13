@@ -1,12 +1,12 @@
 <?php
 
-namespace Moon\SEO\Modules\General;
+namespace Moon\SEO\Support;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// uninstall.php repeats these literals because it cannot use the autoloader.
+// Shared by the modules that read the per-post overrides. uninstall.php repeats these literals because it cannot use the autoloader.
 final class PostMetaKeys {
 
 	public const TITLE = '_moon_seo_title';

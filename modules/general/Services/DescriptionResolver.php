@@ -2,9 +2,10 @@
 
 namespace Moon\SEO\Modules\General\Services;
 
-use Moon\SEO\Modules\General\PostMetaKeys;
 use Moon\SEO\Services\OptionManager;
 use Moon\SEO\Services\SupportedPostTypes;
+use Moon\SEO\Support\PostMetaKeys;
+use Moon\SEO\Support\PostTitle;
 use WP_Post;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,7 +44,7 @@ final class DescriptionResolver {
 
 		// Checked before the homepage so a static front page honours its own override.
 		if ( null !== $post && null !== $this->supported_post_types->content_group( $post->post_type ) ) {
-			return $this->resolve_for_post( $post, $this->get_override( $post->ID ), get_the_title( $post ) );
+			return $this->resolve_for_post( $post, $this->get_override( $post->ID ), PostTitle::get( $post ) );
 		}
 
 		if ( is_front_page() && ! is_paged() ) {

@@ -3,6 +3,7 @@
 namespace Moon\SEO\Modules\General;
 
 use Moon\SEO\Services\SupportedPostTypes;
+use Moon\SEO\Support\PostMetaKeys;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

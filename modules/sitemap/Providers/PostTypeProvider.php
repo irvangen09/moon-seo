@@ -3,6 +3,7 @@
 namespace Moon\SEO\Modules\Sitemap\Providers;
 
 use Moon\SEO\Services\OptionManager;
+use Moon\SEO\Support\PostMetaKeys;
 use WP_Query;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -115,7 +116,22 @@ final class PostTypeProvider implements ProviderInterface {
 		return array(
 			'post_type'              => $this->post_type,
 			'post_status'            => 'publish',
+			// A password-protected post is a public URL with no public content.
+			'has_password'           => false,
 			'post__not_in'           => $excluded_items['excluded_posts'] ?? array(),
+			// The override is a serialized list, so the directive is matched with its quotes; posts without an override pass.
+			'meta_query'             => array(
+				'relation' => 'OR',
+				array(
+					'key'     => PostMetaKeys::ROBOTS,
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => PostMetaKeys::ROBOTS,
+					'value'   => '"noindex"',
+					'compare' => 'NOT LIKE',
+				),
+			),
 			'fields'                 => 'ids',
 			'ignore_sticky_posts'    => true,
 			'suppress_filters'       => true,

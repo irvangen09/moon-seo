@@ -16,7 +16,7 @@ final class Admin {
 
 	private AdminMenu $admin_menu;
 
-	// The value returned by add_submenu_page(), so Assets can target this exact screen.
+	// The value returned when the menu page is added, so Assets can target this exact screen.
 	private ?string $hook_suffix = null;
 
 	public function __construct( AdminMenu $admin_menu ) {
@@ -29,14 +29,29 @@ final class Admin {
 	}
 
 	public function register_menu(): void {
-		$hook_suffix = add_submenu_page(
-			$this->admin_menu->get_top_level_slug(),
-			__( 'Moon SEO - Sitemap', 'moon-seo' ),
-			__( 'Sitemap', 'moon-seo' ),
-			'manage_options',
-			self::MENU_SLUG,
-			array( $this, 'render_page' )
-		);
+		$parent = $this->admin_menu->get_top_level_slug();
+
+		// With no top-level menu (the module that owns it is switched off), this page becomes the top-level entry so it stays reachable.
+		if ( ! isset( $GLOBALS['admin_page_hooks'][ $parent ] ) ) {
+			$hook_suffix = add_menu_page(
+				__( 'Moon SEO - Sitemap', 'moon-seo' ),
+				__( 'SEO', 'moon-seo' ),
+				'manage_options',
+				self::MENU_SLUG,
+				array( $this, 'render_page' ),
+				'dashicons-search',
+				80
+			);
+		} else {
+			$hook_suffix = add_submenu_page(
+				$parent,
+				__( 'Moon SEO - Sitemap', 'moon-seo' ),
+				__( 'Sitemap', 'moon-seo' ),
+				'manage_options',
+				self::MENU_SLUG,
+				array( $this, 'render_page' )
+			);
+		}
 
 		$this->hook_suffix = false === $hook_suffix ? null : $hook_suffix;
 	}

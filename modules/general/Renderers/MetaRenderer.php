@@ -2,9 +2,9 @@
 
 namespace Moon\SEO\Modules\General\Renderers;
 
-use Moon\SEO\Modules\General\PostMetaKeys;
 use Moon\SEO\Modules\General\Services\DescriptionResolver;
 use Moon\SEO\Services\OptionManager;
+use Moon\SEO\Support\PostMetaKeys;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
