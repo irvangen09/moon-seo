@@ -1,30 +1,10 @@
-# Version control and editor config
-.git
-.github
-.gitignore
-.gitattributes
-.editorconfig
-.distignore
-
-# Tooling
-composer.json
-composer.lock
-package.json
-package-lock.json
-phpcs.xml
-webpack.config.js
+# Dependencies
 node_modules
 vendor
-scripts
 
-# Repository documentation
-README.md
-CHANGELOG.md
-CONTRIBUTING.md
-CODE_OF_CONDUCT.md
-SECURITY.md
-MAINTENANCE.md
-
-# Misc
+# Release archives and logs
+*.zip
 *.log
+
+# OS files
 .DS_Store

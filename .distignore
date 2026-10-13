@@ -15,7 +15,6 @@ phpcs.xml
 webpack.config.js
 node_modules
 vendor
-src
 scripts
 
 # Repository documentation
