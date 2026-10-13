@@ -62,7 +62,7 @@ function getTitleStatus( preview, seoTitle ) {
 
 		if ( seoTitle ) {
 			return sprintf(
-				/* translators: 1: character count of the resulting title, 2: recommended character limit */
+				/* translators: 1: character count of the resulting text, 2: recommended character limit */
 				__( '%1$d/%2$d characters (custom)', 'moon-seo' ),
 				length,
 				TITLE_MAX_LENGTH
@@ -70,7 +70,7 @@ function getTitleStatus( preview, seoTitle ) {
 		}
 
 		return sprintf(
-			/* translators: 1: character count of the resulting title, 2: recommended character limit */
+			/* translators: 1: character count of the resulting text, 2: recommended character limit */
 			__( '%1$d/%2$d characters (from template)', 'moon-seo' ),
 			length,
 			TITLE_MAX_LENGTH
@@ -99,7 +99,7 @@ function getDescriptionStatus( preview, metaDescription ) {
 
 		if ( metaDescription ) {
 			return sprintf(
-				/* translators: 1: character count of the resulting description, 2: recommended character limit */
+				/* translators: 1: character count of the resulting text, 2: recommended character limit */
 				__( '%1$d/%2$d characters (custom)', 'moon-seo' ),
 				length,
 				DESCRIPTION_MAX_LENGTH
@@ -107,7 +107,7 @@ function getDescriptionStatus( preview, metaDescription ) {
 		}
 
 		return sprintf(
-			/* translators: 1: character count of the resulting description, 2: recommended character limit */
+			/* translators: 1: character count of the resulting text, 2: recommended character limit */
 			__( '%1$d/%2$d characters (generated)', 'moon-seo' ),
 			length,
 			DESCRIPTION_MAX_LENGTH

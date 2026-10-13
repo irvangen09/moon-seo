@@ -13,7 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Every key embeds a version token. Invalidating a type means changing its token, so the old entries are never
  * read again and simply expire. Unlike deleting rows by prefix, this works with and without an external object
- * cache, and the expiration keeps the transients out of the autoloaded options.
+ * cache, and the expiration keeps the transients out of the autoloaded options. The plugin version is part of
+ * the key as well, so entries built by an older release are not served after an update.
  */
 final class SitemapCache {
 
@@ -151,7 +152,7 @@ final class SitemapCache {
 	private function key( string $type, string $suffix ): string {
 		$token = get_option( self::GLOBAL_TOKEN, '0' ) . '-' . get_option( self::TYPE_TOKEN_PREFIX . $type, '0' );
 
-		return self::KEY_PREFIX . $type . '_' . $token . '_' . $suffix;
+		return self::KEY_PREFIX . $type . '_' . MOON_SEO_VERSION . '-' . $token . '_' . $suffix;
 	}
 
 	private function new_token(): string {
