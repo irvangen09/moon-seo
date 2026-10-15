@@ -2,6 +2,9 @@
 node_modules
 vendor
 
+# Build output
+/build/
+
 # Release archives and logs
 *.zip
 *.log

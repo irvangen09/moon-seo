@@ -7,10 +7,18 @@
     "build": "wp-scripts build",
     "start": "wp-scripts start",
     "lint:js": "wp-scripts lint-js",
+    "lint:css": "wp-scripts lint-style \"src/**/*.css\"",
+    "lint": "npm run lint:js && npm run lint:css",
+    "check:version": "node scripts/check-version.js",
+    "check:release": "node scripts/check-release.js",
+    "verify": "npm run lint && npm run build && npm run check:version && npm run plugin-zip && npm run check:release",
     "format": "wp-scripts format",
     "plugin-zip": "node scripts/plugin-zip.js",
     "makejson": "node scripts/make-json.js",
     "makepot": "wp i18n make-pot . languages/moon-seo.pot --slug=moon-seo --exclude=vendor,node_modules,build,scripts"
+  },
+  "engines": {
+    "node": ">=18.12.0"
   },
   "files": [
     "moon-seo.php",

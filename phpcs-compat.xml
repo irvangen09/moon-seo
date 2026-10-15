@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset name="Moon SEO PHP compatibility" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+	<description>Checks that the PHP code runs on the minimum supported PHP version.</description>
+
+	<file>.</file>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="parallel" value="8"/>
+	<arg value="ps"/>
+
+	<config name="testVersion" value="8.0-"/>
+
+	<rule ref="PHPCompatibility"/>
+</ruleset>

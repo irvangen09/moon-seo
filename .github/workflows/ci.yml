@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php-syntax:
+    name: PHP syntax (${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.0', '8.3' ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: none
+
+      - name: Lint every PHP file
+        run: |
+          status=0
+          while IFS= read -r -d '' file; do
+            php -d display_errors=1 -l "$file" || status=1
+          done < <(find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0)
+          exit $status
+
+  coding-standards:
+    name: Coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install the coding standards
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Check the PHP code
+        run: vendor/bin/phpcs
+
+  php-compatibility:
+    name: PHP compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: none
+
+      # PHPCompatibility 10 needs PHP_CodeSniffer 4, which the WordPress Coding
+      # Standards do not support yet, so it is installed separately from Composer.
+      - name: Install PHP_CodeSniffer 4 and PHPCompatibility
+        run: |
+          set -e
+          dir="$RUNNER_TEMP/compat"
+          mkdir -p "$dir"
+          curl -sSLf -o "$dir/phpcs.phar" https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/download/4.0.4/phpcs.phar
+          echo "4b010cd21d8bc8a17e2504792e3c77ef8259126f24caf7eafe7eddef1fa871e9  $dir/phpcs.phar" | sha256sum --check
+          git clone --quiet --depth 1 --branch 10.0.0-alpha2 https://github.com/PHPCompatibility/PHPCompatibility.git "$dir/php-compat"
+          git clone --quiet --depth 1 --branch 1.2.3 https://github.com/PHPCSStandards/PHPCSUtils.git "$dir/phpcsutils"
+          echo "COMPAT_DIR=$dir" >> "$GITHUB_ENV"
+
+      - name: Check compatibility with the minimum PHP version
+        run: php "$COMPAT_DIR/phpcs.phar" --runtime-set installed_paths "$COMPAT_DIR/php-compat,$COMPAT_DIR/phpcsutils" --standard=phpcs-compat.xml
+
+  javascript:
+    name: JavaScript, CSS and release archive
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Check the version
+        run: npm run check:version
+
+      - name: Build the release archive
+        run: npm run plugin-zip
+
+      - name: Check the release archive
+        run: npm run check:release
+
+      - name: Dependency advisories (informational)
+        run: npm audit --audit-level=high
+        continue-on-error: true

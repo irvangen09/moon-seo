@@ -88,17 +88,23 @@ Deleting the plugin from the Plugins screen removes its options, per-post SEO fi
 
 ## Development
 
-The JavaScript in `build/` is compiled from `src/` with `@wordpress/scripts`.
+The JavaScript in `build/` is compiled from `src/` with `@wordpress/scripts`. `build/` is not stored in the repository: run `npm ci` and `npm run build` after cloning, or install a release archive. Node 18.12 or later is required.
 
 ```bash
-npm install
-npm run build        # compile src/ into build/
-npm run lint:js      # lint the JavaScript
-npm run makepot      # regenerate languages/moon-seo.pot (requires WP-CLI)
-npm run plugin-zip   # build the release archive
+npm ci
+npm run build          # compile src/ into build/
+npm run lint           # lint the JavaScript and the CSS
+npm run check:version  # the version must match in every file that states it
+npm run plugin-zip     # build the release archive
+npm run check:release  # verify what the archive contains
+npm run verify         # all of the above, in order
+npm run makepot        # regenerate languages/moon-seo.pot (requires WP-CLI)
+npm run makejson       # JSON translations for the scripts, from the .po files (requires WP-CLI)
 ```
 
-PHP is checked with PHP_CodeSniffer and the WordPress Coding Standards (`phpcs.xml`). There is no Composer autoloading at runtime; Composer is only used for development tooling.
+PHP is checked with PHP_CodeSniffer and the WordPress Coding Standards (`composer install`, then `vendor/bin/phpcs`). `phpcs-compat.xml` checks compatibility with the minimum PHP version; it needs PHP_CodeSniffer 4 with PHPCompatibility, which the CI workflow (`.github/workflows/ci.yml`) installs. There is no Composer autoloading at runtime; Composer is only used for development tooling.
+
+To release a new version, change it in the plugin header and in `MOON_SEO_VERSION` (both in `moon-seo.php`) and in `package.json`, then run `npm run verify`.
 
 ## License
 

@@ -12,7 +12,10 @@
 	margin: 0;
 }
 
-/* Spacing between repeated groups (for example Homepage, Post, Page) inside one panel. */
+/*
+ * Spacing between repeated groups (for example Homepage, Post, Page) inside
+ * one panel.
+ */
 .moon-seo-settings .components-panel__body h3 {
 	margin-top: 32px;
 	margin-bottom: 8px;
@@ -22,7 +25,10 @@
 	margin-top: 0;
 }
 
-/* Controls opt into the margin-free style, so the spacing between them is set here. */
+/*
+ * Controls opt into the margin-free style, so the spacing between them is
+ * set here.
+ */
 .moon-seo-settings .components-base-control {
 	margin-bottom: 16px;
 }
