@@ -93,7 +93,8 @@ final class PostTypeProvider implements ProviderInterface {
 					'posts_per_page'         => count( $batch_ids ),
 					'no_found_rows'          => true,
 					'update_post_meta_cache' => false,
-					'update_post_term_cache' => false,
+					// Permalinks built from the category read the post's terms; one query for the batch instead of one per post.
+					'update_post_term_cache' => true,
 				)
 			);
 

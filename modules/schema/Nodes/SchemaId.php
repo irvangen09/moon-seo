@@ -2,6 +2,7 @@
 
 namespace Moon\SEO\Modules\Schema\Nodes;
 
+use Moon\SEO\Support\CanonicalUrl;
 use WP_Post;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,7 +36,14 @@ final class SchemaId {
 		return $permalink . '#primaryimage';
 	}
 
+	// A post that names another URL as canonical is described under that URL.
 	public static function permalink( WP_Post $post ): string {
+		$override = CanonicalUrl::override_for_post( $post->ID );
+
+		if ( '' !== $override ) {
+			return $override;
+		}
+
 		$permalink = get_permalink( $post );
 
 		return false !== $permalink ? $permalink : home_url( '/' );

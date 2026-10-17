@@ -129,6 +129,11 @@ final class SitemapCache {
 
 	public function invalidate_for_term( int $term_id, int $tt_id, string $taxonomy ): void {
 		$this->invalidate( $taxonomy );
+
+		// With the category in the permalink, renaming or deleting a category changes the URL of every post in it.
+		if ( 'category' === $taxonomy && false !== strpos( (string) get_option( 'permalink_structure' ), '%category%' ) ) {
+			$this->invalidate( 'post' );
+		}
 	}
 
 	public function invalidate_for_term_count( int $tt_id, string $taxonomy ): void {

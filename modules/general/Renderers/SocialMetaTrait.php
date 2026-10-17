@@ -45,8 +45,11 @@ trait SocialMetaTrait {
 
 	// Order: the post's featured image, this platform's default image, then the site image.
 	private function resolve_image_url( int $default_image_id ): string {
-		if ( is_singular() && has_post_thumbnail() ) {
-			$url = get_the_post_thumbnail_url( null, 'full' );
+		// The queried post, not the global one, which a theme or plugin may have replaced.
+		$thumbnail_id = is_singular() ? (int) get_post_thumbnail_id( get_queried_object_id() ) : 0;
+
+		if ( $thumbnail_id > 0 ) {
+			$url = wp_get_attachment_image_url( $thumbnail_id, 'full' );
 
 			if ( false !== $url ) {
 				return $url;

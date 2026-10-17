@@ -1,4 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
+import { useSelect } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
 
 const ROUTE = '/moon-seo/v1/seo-preview';
@@ -42,6 +43,22 @@ export default function useSeoPreview( {
 	const [ preview, setPreview ] = useState( null );
 	const isFirstRun = useRef( true );
 
+	// An automatic description is built from the saved content, so a finished save makes the answer outdated.
+	const isSaving = useSelect(
+		( select ) => select( 'core/editor' ).isSavingPost(),
+		[]
+	);
+	const wasSaving = useRef( false );
+	const [ saveCount, setSaveCount ] = useState( 0 );
+
+	useEffect( () => {
+		if ( wasSaving.current && ! isSaving ) {
+			setSaveCount( ( count ) => count + 1 );
+		}
+
+		wasSaving.current = isSaving;
+	}, [ isSaving ] );
+
 	useEffect( () => {
 		if ( ! postId ) {
 			return undefined;
@@ -73,7 +90,7 @@ export default function useSeoPreview( {
 			isCurrent = false;
 			clearTimeout( timer );
 		};
-	}, [ postId, seoTitle, metaDescription, postTitle ] );
+	}, [ postId, seoTitle, metaDescription, postTitle, saveCount ] );
 
 	return preview;
 }

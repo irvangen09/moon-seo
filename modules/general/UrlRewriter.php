@@ -22,14 +22,14 @@ final class UrlRewriter {
 		'category' => array(
 			'toggle'       => 'remove_category_base',
 			'query_var'    => 'category_name',
-			'redirect_var' => 'category_redirect',
+			'redirect_var' => 'moon_seo_category_redirect',
 			'option'       => 'category_base',
 			'default_base' => 'category',
 		),
 		'post_tag' => array(
 			'toggle'       => 'remove_tag_base',
 			'query_var'    => 'tag',
-			'redirect_var' => 'tag_redirect',
+			'redirect_var' => 'moon_seo_tag_redirect',
 			'option'       => 'tag_base',
 			'default_base' => 'tag',
 		),

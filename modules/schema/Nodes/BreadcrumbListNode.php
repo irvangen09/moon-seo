@@ -22,7 +22,8 @@ final class BreadcrumbListNode implements NodeInterface {
 	public function get_node(): ?array {
 		$post = is_singular() ? get_queried_object() : null;
 
-		if ( ! $post instanceof WP_Post || ! $this->supported_post_types->is_supported( $post->post_type ) ) {
+		// The home page is the top of every trail, so a trail on it would only list it twice.
+		if ( is_front_page() || ! $post instanceof WP_Post || ! $this->supported_post_types->is_supported( $post->post_type ) ) {
 			return null;
 		}
 

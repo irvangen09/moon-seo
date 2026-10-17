@@ -31,6 +31,14 @@ final class ContentTypeRegistry {
 	public function get_custom_taxonomies(): array {
 		$taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
 
+		// A taxonomy without archive pages has no URL to list.
+		$taxonomies = array_filter(
+			$taxonomies,
+			static function ( $taxonomy ): bool {
+				return is_taxonomy_viewable( $taxonomy );
+			}
+		);
+
 		return array_diff_key( $taxonomies, array_flip( self::BUILT_IN_TAXONOMIES ) );
 	}
 }

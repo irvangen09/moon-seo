@@ -6,6 +6,8 @@ use Moon\SEO\Modules\General\Services\DescriptionResolver;
 use Moon\SEO\Services\OptionManager;
 use Moon\SEO\Services\SiteIdentity;
 use Moon\SEO\Services\SupportedPostTypes;
+use Moon\SEO\Support\CanonicalUrl;
+use WP_Post;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -63,30 +65,23 @@ final class OpenGraphRenderer implements RendererInterface {
 
 	// Follows the Schema type of the post type, so "article" is never claimed for what the Schema module calls a web page.
 	private function resolve_type(): string {
-		if ( is_singular() && 'article' === $this->supported_post_types->schema_node( (string) get_post_type() ) ) {
+		$post = get_queried_object();
+
+		if ( is_singular() && $post instanceof WP_Post && 'article' === $this->supported_post_types->schema_node( $post->post_type ) ) {
 			return 'article';
 		}
 
 		return 'website';
 	}
 
+	// The canonical URL, so the share URL and the canonical tag never disagree.
 	private function resolve_url(): string {
-		if ( is_front_page() ) {
+		$url = CanonicalUrl::for_request();
+
+		if ( '' === $url && is_front_page() ) {
 			return home_url( '/' );
 		}
 
-		if ( is_singular() ) {
-			$permalink = get_permalink();
-
-			return false !== $permalink ? $permalink : '';
-		}
-
-		if ( is_category() || is_tag() ) {
-			$term_link = get_term_link( get_queried_object() );
-
-			return is_wp_error( $term_link ) ? '' : $term_link;
-		}
-
-		return '';
+		return $url;
 	}
 }

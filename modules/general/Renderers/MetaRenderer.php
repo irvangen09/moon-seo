@@ -4,6 +4,7 @@ namespace Moon\SEO\Modules\General\Renderers;
 
 use Moon\SEO\Modules\General\Services\DescriptionResolver;
 use Moon\SEO\Services\OptionManager;
+use Moon\SEO\Support\CanonicalUrl;
 use Moon\SEO\Support\PostMetaKeys;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -47,7 +48,7 @@ final class MetaRenderer implements RendererInterface {
 			printf( '<meta name="description" content="%s" />' . "\n", esc_attr( $description ) );
 		}
 
-		$canonical = $this->resolve_canonical_url();
+		$canonical = CanonicalUrl::for_request();
 
 		if ( '' !== $canonical ) {
 			printf( '<link rel="canonical" href="%s" />' . "\n", esc_url( $canonical ) );
@@ -58,6 +59,11 @@ final class MetaRenderer implements RendererInterface {
 	public function filter_robots( array $robots ): array {
 		// "Discourage search engines" always wins, so a staging site cannot be made indexable by a per-page setting.
 		if ( '0' === get_option( 'blog_public' ) ) {
+			return $robots;
+		}
+
+		// WordPress noindexes embeds itself, and none of the settings here apply to them.
+		if ( is_embed() ) {
 			return $robots;
 		}
 
@@ -135,35 +141,5 @@ final class MetaRenderer implements RendererInterface {
 		}
 
 		return self::ROBOTS_PRESET_MAP[ $preset ] ?? $default_meta;
-	}
-
-	// Search and 404 get no canonical.
-	private function resolve_canonical_url(): string {
-		if ( is_singular() ) {
-			$override = get_post_meta( get_queried_object_id(), PostMetaKeys::CANONICAL, true );
-
-			if ( is_string( $override ) && '' !== trim( $override ) ) {
-				return trim( $override );
-			}
-		}
-
-		if ( is_front_page() && ! is_paged() ) {
-			return home_url( '/' );
-		}
-
-		if ( is_singular() ) {
-			// Same function core uses, so a paged post keeps its page number.
-			$url = wp_get_canonical_url();
-
-			return false !== $url ? $url : '';
-		}
-
-		if ( is_category() || is_tag() ) {
-			$term_link = get_term_link( get_queried_object() );
-
-			return is_wp_error( $term_link ) ? '' : $term_link;
-		}
-
-		return '';
 	}
 }

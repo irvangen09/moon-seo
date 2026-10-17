@@ -285,7 +285,7 @@ final class Frontend {
 		$reserved = array_merge( array_keys( self::CORE_TYPES ), array_column( self::CORE_TYPES, 'prefix' ) );
 
 		foreach ( $content['custom_post_types'] as $slug => $enabled ) {
-			if ( $enabled && post_type_exists( $slug ) && ! in_array( $slug, $reserved, true ) && ! isset( $used[ $slug ] ) ) {
+			if ( $enabled && is_post_type_viewable( $slug ) && ! in_array( $slug, $reserved, true ) && ! isset( $used[ $slug ] ) ) {
 				$active[ $slug ] = array(
 					'prefix' => $slug,
 					'kind'   => 'post_type',
@@ -295,7 +295,7 @@ final class Frontend {
 		}
 
 		foreach ( $content['custom_taxonomies'] as $slug => $enabled ) {
-			if ( $enabled && taxonomy_exists( $slug ) && ! in_array( $slug, $reserved, true ) && ! isset( $used[ $slug ] ) ) {
+			if ( $enabled && is_taxonomy_viewable( $slug ) && ! in_array( $slug, $reserved, true ) && ! isset( $used[ $slug ] ) ) {
 				$active[ $slug ] = array(
 					'prefix' => $slug,
 					'kind'   => 'taxonomy',
